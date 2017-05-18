@@ -2,7 +2,6 @@
 import requests
 
 from .exceptions import AuthException, ResourceException
-import collections
 
 
 class Client(object):
@@ -22,7 +21,7 @@ class AutoApiHttp(object):
 
     def url(self):
         url = self.parent.url
-        return "%s/%s" % (url() if isinstance(url, collections.Callable) else url, self.id)
+        return "%s/%s" % (url() if callable(url) else url, self.id)
 
     def headers(self):
         return self.parent.headers()
@@ -110,7 +109,7 @@ class Resource(AutoApiHttp):
         if response.status_code != 200:
             raise ResourceException("Not found resource")
         json = response.json()
-        self._items = list(json.keys())
+        self._items = json.keys()
         for key in json:
             setattr(self, key, json[key])
 
@@ -127,7 +126,7 @@ class Resource(AutoApiHttp):
             for key in json:
                 if key != 'id':
                     setattr(self, key, json[key])
-            self._items = list(json.keys())
+            self._items = json.keys()
         return response.status_code == 204
 
     def patch(self, json=None):

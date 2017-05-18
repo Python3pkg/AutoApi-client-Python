@@ -36,9 +36,9 @@ class TestCollection(unittest.TestCase):
         self.assertIsInstance(self.client.api.collection, Collection)
 
     def test_get(self, mock):
-        mock.get('%s/api/collection' % self.url, status_code=200, json=list(self.fixture.values()))
+        mock.get('%s/api/collection' % self.url, status_code=200, json=self.fixture.values())
         items = self.client.api.collection.get(params={'key': 'value'})
-        self.assertEqual(items, list(self.fixture.values()))
+        self.assertEqual(items, self.fixture.values())
 
     def test_post(self, mock):
         mock.post('%s/api/collection' % self.url, status_code=201, json=self.fixture['id_1'])

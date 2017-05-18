@@ -5,7 +5,6 @@ import unittest
 
 from auto_api.app import app
 from auto_api.auth import _admin_manager_client
-import collections
 
 
 KEYS_TO_FIX = {
@@ -16,7 +15,7 @@ KEYS_TO_FIX = {
 
 def _fix_kwargs(verb):
     def _http_verb(*args, **kwargs):
-        for old_key, new_key in KEYS_TO_FIX.items():
+        for old_key, new_key in KEYS_TO_FIX.iteritems():
             if old_key in kwargs:
                 kwargs[new_key] = kwargs.pop(old_key)
         if 'data' in kwargs:
@@ -35,7 +34,7 @@ class ClientWrapper(object):
 
     def __getattr__(self, name):
         attribute = getattr(self.client, name)
-        if isinstance(attribute, collections.Callable):
+        if callable(attribute):
             return _fix_kwargs(attribute)
         return attribute
 

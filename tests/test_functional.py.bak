@@ -36,7 +36,7 @@ class TestAutoApi(FunctionalTests):
         result = client.api.collection.get()
         self.assertItemsEqual(result, [item])
         element = client.api.collection[item['id']]
-        for key, value in item.items():
+        for key, value in item.iteritems():
             self.assertEqual(element[key], value)
         client.api.logout()
 
@@ -48,11 +48,11 @@ class TestAutoApi(FunctionalTests):
         new_fields = {'key': 'other_value', 'other_key': 'eulav'}
         element = client.api.collection[item['id']]
         element.patch(json=new_fields)
-        for key, value in new_fields.items():
+        for key, value in new_fields.iteritems():
             self.assertEqual(element[key], value)
 
         element = client.api.collection[item['id']]
-        for key, value in new_fields.items():
+        for key, value in new_fields.iteritems():
             self.assertEqual(element[key], value)
 
         client.api.logout()
@@ -70,7 +70,7 @@ class TestAutoApi(FunctionalTests):
             if key not in new_fields:
                 with self.assertRaises(AttributeError):
                     element[key]
-        for key, value in new_fields.items():
+        for key, value in new_fields.iteritems():
             self.assertEqual(element[key], value)
 
         element = client.api.collection[item['id']]
@@ -78,7 +78,7 @@ class TestAutoApi(FunctionalTests):
             if key not in new_fields:
                 with self.assertRaises(AttributeError):
                     element[key]
-        for key, value in new_fields.items():
+        for key, value in new_fields.iteritems():
             self.assertEqual(element[key], value)
 
         client.api.logout()
@@ -93,7 +93,7 @@ class TestAutoApi(FunctionalTests):
         element = client.api.collection[item['id']]
         self.assertTrue(element.delete())
 
-        for key, value in fields.items():
+        for key, value in fields.iteritems():
             self.assertEqual(element[key], value)
 
         with self.assertRaises(ResourceException):
